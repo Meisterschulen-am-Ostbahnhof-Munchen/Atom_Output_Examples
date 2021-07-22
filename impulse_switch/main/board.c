@@ -20,14 +20,17 @@
 #define BUTTON_IO_NUM           32		// Pin 32.
 #define BUTTON_ACTIVE_LEVEL     0		//Masse-Geschalten
 
+#define BLINK_GPIO GPIO_NUM_19
 
 
-
+static int level = 0;
 
 
 static void button_tap_cb(void* arg)
 {
     ESP_LOGI(TAG, "tap cb (%s)", (char *)arg);
+    level = !level;
+    gpio_set_level(BLINK_GPIO, level);
 
 }
 
@@ -42,4 +45,15 @@ static void board_button_init(void)
 void board_init(void)
 {
     board_button_init();
+
+    /* Configure the IOMUX register for pad BLINK_GPIO (some pads are
+       muxed to GPIO on reset already, but some default to other
+       functions and need to be switched to GPIO. Consult the
+       Technical Reference for a list of pads and their default
+       functions.)
+    */
+    gpio_reset_pin(BLINK_GPIO);
+    /* Set the GPIO as a push/pull output */
+    gpio_set_direction(BLINK_GPIO, GPIO_MODE_OUTPUT);
+    gpio_set_level(BLINK_GPIO, level); //set to 0 at Reset.
 }
