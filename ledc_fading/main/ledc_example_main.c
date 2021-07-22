@@ -39,7 +39,7 @@
 #define LEDC_HS_CH0_CHANNEL    LEDC_CHANNEL_0
 
 
-#define LEDC_TEST_DUTY         (4000)
+#define LEDC_TEST_DUTY         (8192)
 #define LEDC_TEST_FADE_TIME    (3000)
 
 void app_main(void)
