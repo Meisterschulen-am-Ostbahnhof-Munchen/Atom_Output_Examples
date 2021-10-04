@@ -15,6 +15,10 @@
 #include "esp_adc_cal.h"
 #include "driver/ledc.h"
 #include "esp_err.h"
+#include "Operators.h"
+#include "TimeLib.h"
+#include "StandardLib.h"
+#include "BasicLib.h"
 
 
 #define DEFAULT_VREF    1100        //Use adc2_vref_to_gpio() to obtain a better estimate
@@ -140,6 +144,12 @@ extern "C" void app_main(void)
     esp_adc_cal_value_t val_type = esp_adc_cal_characterize(ADC_UNIT_1, atten, width, DEFAULT_VREF, adc_chars);
     print_char_val_type(val_type);
 
+
+    FT_PT1 pt1;
+    pt1.K = 1.0;
+    pt1.T = 3000;
+
+
     //Continuously sample ADC1
     while (1) {
         uint32_t adc_reading = 0;
@@ -159,9 +169,11 @@ extern "C" void app_main(void)
 
 
 
-
-        ledc_set_duty(ledc_channel.speed_mode, ledc_channel.channel, adc_reading);
+        //unfiltered
+        //ledc_set_duty(ledc_channel.speed_mode, ledc_channel.channel, adc_reading);
+        //filtered
+        ledc_set_duty(ledc_channel.speed_mode, ledc_channel.channel, pt1(adc_reading));
         ledc_update_duty(ledc_channel.speed_mode, ledc_channel.channel);
-        vTaskDelay(pdMS_TO_TICKS(1000));
+        vTaskDelay(pdMS_TO_TICKS(100));
     }
 }
