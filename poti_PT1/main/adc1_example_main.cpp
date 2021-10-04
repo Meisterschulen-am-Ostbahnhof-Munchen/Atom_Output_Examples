@@ -21,7 +21,7 @@
 #define NO_OF_SAMPLES   64          //Multisampling
 
 static esp_adc_cal_characteristics_t *adc_chars;
-static const adc_channel_t channel = ADC_CHANNEL_4;     //GPIO32 if ADC1
+static const adc1_channel_t channel = ADC1_CHANNEL_4;     //GPIO32 if ADC1
 static const adc_bits_width_t width = ADC_WIDTH_BIT_12;
 static const adc_atten_t atten = ADC_ATTEN_DB_11;
 
@@ -91,10 +91,10 @@ extern "C" void app_main(void)
      * that will be used by LED Controller
      */
     ledc_timer_config_t ledc_timer = {
-        .duty_resolution = LEDC_TIMER_13_BIT, // resolution of PWM duty
-        .freq_hz = 5000,                      // frequency of PWM signal
         .speed_mode = LEDC_HS_MODE,           // timer mode
+        .duty_resolution = LEDC_TIMER_13_BIT, // resolution of PWM duty
         .timer_num = LEDC_HS_TIMER,            // timer index
+        .freq_hz = 5000,                      // frequency of PWM signal
         .clk_cfg = LEDC_AUTO_CLK,              // Auto select the source clock
     };
     // Set configuration of timer0 for high speed channels
@@ -114,12 +114,13 @@ extern "C" void app_main(void)
      *         will be the same
      */
     ledc_channel_config_t ledc_channel = {
-		.channel    = LEDC_HS_CH0_CHANNEL,
-		.duty       = 0,
-		.gpio_num   = LEDC_HS_CH0_GPIO,
+    	.gpio_num   = LEDC_HS_CH0_GPIO,
 		.speed_mode = LEDC_HS_MODE,
+    	.channel    = LEDC_HS_CH0_CHANNEL,
+		.intr_type  = LEDC_INTR_DISABLE,
+		.timer_sel  = LEDC_HS_TIMER,
+		.duty       = 0,
 		.hpoint     = 0,
-		.timer_sel  = LEDC_HS_TIMER
     };
 
     // Set LED Controller with previously prepared configuration
@@ -135,7 +136,7 @@ extern "C" void app_main(void)
 
 
     //Characterize ADC
-    adc_chars = calloc(1, sizeof(esp_adc_cal_characteristics_t));
+    adc_chars = (esp_adc_cal_characteristics_t *)calloc(1, sizeof(esp_adc_cal_characteristics_t));
     esp_adc_cal_value_t val_type = esp_adc_cal_characterize(ADC_UNIT_1, atten, width, DEFAULT_VREF, adc_chars);
     print_char_val_type(val_type);
 
