@@ -1,0 +1,3 @@
+[submodule "poti_PT1/components/PlcLib"]
+	path = poti_PT1/components/PlcLib
+	url = git@github.com:Meisterschulen-am-Ostbahnhof-Munchen/PlcLib.git
