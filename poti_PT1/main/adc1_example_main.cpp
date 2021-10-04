@@ -83,7 +83,7 @@ static void print_char_val_type(esp_adc_cal_value_t val_type)
 
 
 
-void app_main(void)
+extern "C" void app_main(void)
 {
 
     /*
