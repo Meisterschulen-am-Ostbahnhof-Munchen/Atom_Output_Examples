@@ -16,6 +16,7 @@
 #include "driver/ledc.h"
 #include "esp_err.h"
 
+
 #define DEFAULT_VREF    1100        //Use adc2_vref_to_gpio() to obtain a better estimate
 #define NO_OF_SAMPLES   64          //Multisampling
 
@@ -152,6 +153,12 @@ void app_main(void)
         adc_reading *= 2;
         adc_reading = adc_reading > 8192 ? 8192 : adc_reading;
         printf("3. LEDC set duty = %d without fade\n", adc_reading);
+
+
+
+
+
+
         ledc_set_duty(ledc_channel.speed_mode, ledc_channel.channel, adc_reading);
         ledc_update_duty(ledc_channel.speed_mode, ledc_channel.channel);
         vTaskDelay(pdMS_TO_TICKS(1000));
