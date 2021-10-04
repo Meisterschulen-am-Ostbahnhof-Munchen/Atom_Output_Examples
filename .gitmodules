@@ -1,0 +1,4 @@
+
+[submodule "Output_Example/components/PlcLib"]
+	path = Output_Example/components/PlcLib
+	url = git@github.com:Meisterschulen-am-Ostbahnhof-Munchen/PlcLib.git
